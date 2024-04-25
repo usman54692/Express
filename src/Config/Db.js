@@ -5,14 +5,14 @@ const dbConnected= async ()=>{
   try {
   
    
-
+    mongoose.connection.on('error',(err)=>{
+      console.log('err in connected to dataBase',err);
+  });
     mongoose.connection.on('connected', ()=>{
         console.log('DataBase Connected Succesfully');
     });
 
-    mongoose.connection.on('error',(err)=>{
-        console.log('err in connected to dataBase',err);
-    })
+    
     await mongoose.connect(Config.DataBaseUrl);
     
   } catch (error) {
