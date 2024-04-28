@@ -18,12 +18,16 @@
   "author": "usman mirza",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cloudinary": "^2.2.0",
     "dotenv": "^16.4.5",
     "errors": "^0.3.0",
     "express": "^4.19.2",
     "http": "^0.0.1-security",
     "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.3.2",
+    "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.0"
   },
   "devDependencies": {
