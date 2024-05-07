@@ -51,45 +51,36 @@ const loginUser = async (req, res, next) => {
   } catch (error) {
     return next(new Error("error while fileds are required"));
   }
-   let user;
+  let user;
   try {
-     user = await userModel.findOne({ email });
+    user = await userModel.findOne({ email });
 
     if (!user) {
       return next(new Error("User Not Found"));
     }
   } catch (error) {
-   
     return next(new Error("Error While User Not Authenticating"));
-
   }
 
   try {
+    const ismatch = await bcrypt.compare(password, user.password);
 
-    const ismatch= await bcrypt.compare(password, user.password);
-
-    if(!ismatch){
-      return next(createHttpError(401,"password is Not Valid"));
-
-
+    if (!ismatch) {
+      return next(createHttpError(401, "password is Not Valid"));
     }
-    
   } catch (error) {
-
-    return next(new Error("Error while password not match"),402)
-    
+    return next(new Error("Error while password not match"), 402);
   }
 
   // create access token..
 
-  const token = JWT.sign({sub:user._id},Config.JwtToken,{expiresIn:"7d"});
-
+  const token = JWT.sign({ sub: user._id }, Config.JwtToken, {
+    expiresIn: "7d",
+  });
 
   res.status(201).json({
     accessToken: token,
   });
 };
-
-
 
 export { createUser, loginUser };

@@ -45,11 +45,12 @@ export const createBook = async (req, res, next) => {
     });
 
     console.log("pdf uploads", bookFileUploads);
+    console.log("userId", req.userId);
 
     const newBook = await bookModel.create({
       title,
       genre,
-      author: "662ca3c8aaff531f295a9cdd",
+      author: req.userId,
       coverImage: uploadResult.secure_url,
       file: bookFileUploads.secure_url,
     });
@@ -66,3 +67,33 @@ export const createBook = async (req, res, next) => {
 
   // console.log(req.files.coverImage[0].filename);
 };
+
+export const updateBook = async (req, res, next) => {
+  try {
+    const { title, genre } = req.body;
+    const bookId = req.params.bookId;
+
+    const book = await bookModel.findOne({ _id: bookId });
+      console.log(book.author);
+    if(!book){
+    return next(createHttpError(402,'book Not Found'))
+    }
+      
+    // check acess
+    if(book.author.toString() !== req.userId){
+return  next(403,'You can not update  others book')
+    }
+  // check if image filed is exist
+
+  let completeCoverImage=''
+  if(req.files.coverImage){
+    const fileName=req.files.coverImage[0].filename
+    const coverMimeType=req.files.coverImage[0].mimetype.split("/").at(-1)
+    const filePath= path.resolve(__dirname,'../../public/data/uploads'+ fileName)
+
+  }
+
+  } catch (error) {}
+};
+
+
